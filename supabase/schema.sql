@@ -47,3 +47,31 @@ create policy "buyer gift notes delete" on public.gift_notes for delete to authe
 
 -- v2: one authenticated account per family identity
 create unique index if not exists family_members_display_name_unique on public.family_members(display_name);
+
+-- v3: Cup privacy is enforced in the database, not only in the UI.
+drop policy if exists "attempt status visible to family" on public.cup_attempts;
+
+create or replace function public.get_cup_attempts()
+returns table(display_name text, day smallint, correct boolean, elapsed_ms integer)
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select fm.display_name,
+         ca.day,
+         case when exists (
+           select 1 from public.cup_attempts mine
+           where mine.user_id = auth.uid() and mine.day = ca.day
+         ) then ca.correct else null end as correct,
+         case when exists (
+           select 1 from public.cup_attempts mine
+           where mine.user_id = auth.uid() and mine.day = ca.day
+         ) then ca.elapsed_ms else null end as elapsed_ms
+  from public.cup_attempts ca
+  join public.family_members fm on fm.id = ca.user_id
+  where auth.uid() is not null;
+$$;
+
+revoke all on function public.get_cup_attempts() from public;
+grant execute on function public.get_cup_attempts() to authenticated;
