@@ -127,3 +127,8 @@ Playbooken er levende dokumentation. Nye generelle læringer kan føjes til den,
 
 - En tom skærm er sjældent en god tom tilstand. Fortæl kort hvad der mangler, hvad brugeren kan gøre nu, og — når relevant — hvem der kan se dataene.
 - Prioriter især tomme tilstande i flerbrugerflows; den første bruger skal kunne forstå funktionen uden at nogen andre allerede har lagt data ind.
+
+## 12. Ny læring: testfunktioner i produktion
+
+- Test- og preview-funktioner må ikke ændre fairness-regler eller give adgang til fremtidigt/hemmeligt konkurrenceindhold.
+- Hold visuel preview adskilt fra autorisation og serverregler. Et testflag må gerne ændre præsentation, men bør ikke være det, der giver adgang til beskyttet data eller handlinger.
