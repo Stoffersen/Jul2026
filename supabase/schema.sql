@@ -213,3 +213,37 @@ begin
 end; $$;
 revoke all on function public.submit_cup_answer(smallint,smallint) from public;
 grant execute on function public.submit_cup_answer(smallint,smallint) to authenticated;
+
+
+-- v7: Recover safely from abandoned Cup rounds.
+-- A start older than 120 seconds has already become un-submittable, so a new
+-- explicit Start action may replace it without granting an extra scored attempt.
+create or replace function public.start_cup_day(p_day smallint)
+returns timestamptz
+language plpgsql security definer set search_path=public
+as $$
+declare v_started timestamptz;
+begin
+ if auth.uid() is null then raise exception 'Not authenticated'; end if;
+ if p_day not between 1 and 24 then raise exception 'Invalid day'; end if;
+ if not public.cup_day_is_open(p_day) then raise exception 'Day not open yet'; end if;
+ if exists(select 1 from public.cup_attempts where user_id=auth.uid() and day=p_day) then raise exception 'Already played'; end if;
+
+ select started_at into v_started
+ from public.cup_starts
+ where user_id=auth.uid() and day=p_day;
+
+ if v_started is not null and clock_timestamp()-v_started > interval '120 seconds' then
+   delete from public.cup_starts where user_id=auth.uid() and day=p_day;
+   v_started:=null;
+ end if;
+
+ if v_started is null then
+   insert into public.cup_starts(user_id,day) values(auth.uid(),p_day)
+   returning started_at into v_started;
+ end if;
+
+ return v_started;
+end; $$;
+revoke all on function public.start_cup_day(smallint) from public;
+grant execute on function public.start_cup_day(smallint) to authenticated;
