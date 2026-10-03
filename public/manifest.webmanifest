@@ -1,0 +1,11 @@
+{
+  "name": "Jul i den gamle Humlehave",
+  "short_name": "Humlehaven",
+  "description": "Familiens julehovedkvarter 2026",
+  "start_url": "/Jul2026/",
+  "scope": "/Jul2026/",
+  "display": "standalone",
+  "background_color": "#0c2a20",
+  "theme_color": "#123a2c",
+  "lang": "da"
+}
