@@ -110,3 +110,52 @@ end;
 $$;
 revoke all on function public.submit_cup_answer(smallint,smallint,integer) from public;
 grant execute on function public.submit_cup_answer(smallint,smallint,integer) to authenticated;
+
+-- v5: server-timed Cup rounds.
+create table if not exists public.cup_starts (
+  user_id uuid not null references public.family_members(id) on delete cascade,
+  day smallint not null check(day between 1 and 24),
+  started_at timestamptz not null default clock_timestamp(),
+  primary key(user_id,day)
+);
+alter table public.cup_starts enable row level security;
+revoke all on public.cup_starts from anon, authenticated;
+
+create or replace function public.start_cup_day(p_day smallint)
+returns timestamptz
+language plpgsql security definer set search_path=public
+as $$
+declare v_started timestamptz;
+begin
+ if auth.uid() is null then raise exception 'Not authenticated'; end if;
+ if p_day not between 1 and 24 then raise exception 'Invalid day'; end if;
+ if exists(select 1 from public.cup_attempts where user_id=auth.uid() and day=p_day) then raise exception 'Already played'; end if;
+ insert into public.cup_starts(user_id,day) values(auth.uid(),p_day)
+ on conflict(user_id,day) do nothing;
+ select started_at into v_started from public.cup_starts where user_id=auth.uid() and day=p_day;
+ return v_started;
+end; $$;
+revoke all on function public.start_cup_day(smallint) from public;
+grant execute on function public.start_cup_day(smallint) to authenticated;
+
+create or replace function public.submit_cup_answer(p_day smallint,p_answer smallint)
+returns table(correct boolean,elapsed_ms integer)
+language plpgsql security definer set search_path=public
+as $$
+declare v_correct boolean; v_started timestamptz; v_ms integer;
+begin
+ if auth.uid() is null then raise exception 'Not authenticated'; end if;
+ if p_day not between 1 and 24 or p_answer not between 0 and 3 then raise exception 'Invalid answer'; end if;
+ if exists(select 1 from public.cup_attempts where user_id=auth.uid() and day=p_day) then raise exception 'Already played'; end if;
+ select started_at into v_started from public.cup_starts where user_id=auth.uid() and day=p_day;
+ if v_started is null then raise exception 'Round not started'; end if;
+ v_ms:=floor(extract(epoch from (clock_timestamp()-v_started))*1000)::integer;
+ if v_ms<250 or v_ms>120000 then raise exception 'Invalid elapsed time'; end if;
+ select correct_answer=p_answer into v_correct from public.cup_challenges where day=p_day;
+ insert into public.cup_attempts(user_id,day,correct,elapsed_ms) values(auth.uid(),p_day,v_correct,v_ms);
+ delete from public.cup_starts where user_id=auth.uid() and day=p_day;
+ return query select v_correct,v_ms;
+end; $$;
+revoke all on function public.submit_cup_answer(smallint,smallint) from public;
+grant execute on function public.submit_cup_answer(smallint,smallint) to authenticated;
+revoke execute on function public.submit_cup_answer(smallint,smallint,integer) from authenticated;
