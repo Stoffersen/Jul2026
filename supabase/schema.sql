@@ -44,3 +44,6 @@ create policy "buyer gift notes only" on public.gift_notes for select to authent
 create policy "buyer gift notes insert" on public.gift_notes for insert to authenticated with check(auth.uid()=buyer_id and auth.uid()<>recipient_id);
 create policy "buyer gift notes update" on public.gift_notes for update to authenticated using(auth.uid()=buyer_id) with check(auth.uid()=buyer_id and auth.uid()<>recipient_id);
 create policy "buyer gift notes delete" on public.gift_notes for delete to authenticated using(auth.uid()=buyer_id);
+
+-- v2: one authenticated account per family identity
+create unique index if not exists family_members_display_name_unique on public.family_members(display_name);
