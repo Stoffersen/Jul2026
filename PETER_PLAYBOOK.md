@@ -122,3 +122,8 @@ Eksempel på besked:
 > Brug Peter Playbook fra Jul2026 som arbejdsform. Byg en første fungerende version, tag fornuftige reversible beslutninger selv, deploy i små verificerede skridt, og stop kun når du reelt har brug for min beslutning.
 
 Playbooken er levende dokumentation. Nye generelle læringer kan føjes til den, når de er værdifulde på tværs af projekter.
+
+## 11. Ny læring: tomme tilstande
+
+- En tom skærm er sjældent en god tom tilstand. Fortæl kort hvad der mangler, hvad brugeren kan gøre nu, og — når relevant — hvem der kan se dataene.
+- Prioriter især tomme tilstande i flerbrugerflows; den første bruger skal kunne forstå funktionen uden at nogen andre allerede har lagt data ind.
