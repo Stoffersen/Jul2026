@@ -75,3 +75,38 @@ $$;
 
 revoke all on function public.get_cup_attempts() from public;
 grant execute on function public.get_cup_attempts() to authenticated;
+
+-- v4: server-authoritative Cup submission.
+create table if not exists public.cup_challenges (
+  day smallint primary key check(day between 1 and 24),
+  correct_answer smallint not null check(correct_answer between 0 and 3)
+);
+alter table public.cup_challenges enable row level security;
+revoke all on public.cup_challenges from anon, authenticated;
+
+insert into public.cup_challenges(day,correct_answer) values
+(1,1),(2,1),(3,1),(4,1),(5,1),(6,0),(7,0),(8,0),(9,0),(10,2),(11,0),(12,1),
+(13,0),(14,1),(15,1),(16,0),(17,1),(18,0),(19,2),(20,0),(21,1),(22,2),(23,2),(24,1)
+on conflict(day) do update set correct_answer=excluded.correct_answer;
+
+drop policy if exists "own attempt once" on public.cup_attempts;
+
+create or replace function public.submit_cup_answer(p_day smallint,p_answer smallint,p_elapsed_ms integer)
+returns table(correct boolean,elapsed_ms integer)
+language plpgsql
+security definer
+set search_path=public
+as $$
+declare v_correct boolean;
+begin
+  if auth.uid() is null then raise exception 'Not authenticated'; end if;
+  if p_day not between 1 and 24 or p_answer not between 0 and 3 then raise exception 'Invalid answer'; end if;
+  if p_elapsed_ms < 250 or p_elapsed_ms > 120000 then raise exception 'Invalid elapsed time'; end if;
+  if exists(select 1 from public.cup_attempts where user_id=auth.uid() and day=p_day) then raise exception 'Already played'; end if;
+  select correct_answer=p_answer into v_correct from public.cup_challenges where day=p_day;
+  insert into public.cup_attempts(user_id,day,correct,elapsed_ms) values(auth.uid(),p_day,v_correct,p_elapsed_ms);
+  return query select v_correct,p_elapsed_ms;
+end;
+$$;
+revoke all on function public.submit_cup_answer(smallint,smallint,integer) from public;
+grant execute on function public.submit_cup_answer(smallint,smallint,integer) to authenticated;
