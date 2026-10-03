@@ -41,3 +41,5 @@
 .mineWishOwner{margin:10px 0;padding:11px 13px;border-radius:14px;background:#ffffff08;border:1px solid #ffffff10;color:#e7d7ad;font-size:11px;font-weight:900}
 
 .adventPhoto{width:100%;max-height:58vh;display:block;object-fit:contain;border-radius:22px;background:#f1eadc;margin:0 0 18px;box-shadow:0 12px 32px rgba(38,25,15,.14)}
+
+.recipientWishes{margin:12px 0 4px;padding:14px;border-radius:18px;background:#fff9eb;color:#243c32;border:1px solid #e7d7ad;text-align:left}.recipientWishes>small{display:block;font-size:9px;font-weight:900;letter-spacing:.08em;color:#8d6c2d;margin-bottom:9px}.recipientWishes>div{display:flex;gap:8px;align-items:flex-start;padding:8px 0;border-top:1px solid #eadfca}.recipientWishes>div b{font-size:11px;line-height:1.45}.recipientWishes p{font-size:11px;margin:5px 0 10px;color:#68776f}.recipientWishes em{display:block;font-size:9px;font-style:normal;color:#77857e;margin-top:8px}
