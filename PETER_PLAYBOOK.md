@@ -137,3 +137,8 @@ Playbooken er levende dokumentation. Nye generelle læringer kan føjes til den,
 
 - Dato- og tidslåse for konkurrencer skal håndhæves server-side i den relevante lokale tidszone; browserens ur og UI-lås er kun præsentation.
 - Skriv tidszonen eksplicit i serverlogik, når en regel følger en lokal kalenderdag. Undgå at lade serverens standardtidszone bestemme produktregler implicit.
+
+## 14. Ny læring: loading før empty state
+
+- En tom tilstand må først vises, når dataindlæsningen er afsluttet. En tom array-værdi under netværkskald er ikke det samme som bekræftet “ingen data”.
+- I flerbrugerflows bør loading, tom, fejl og data være fire tydelige tilstande; ellers kan langsomt netværk få rigtige data til kortvarigt at se slettede ud.
