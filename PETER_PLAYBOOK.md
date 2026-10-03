@@ -132,3 +132,8 @@ Playbooken er levende dokumentation. Nye generelle læringer kan føjes til den,
 
 - Test- og preview-funktioner må ikke ændre fairness-regler eller give adgang til fremtidigt/hemmeligt konkurrenceindhold.
 - Hold visuel preview adskilt fra autorisation og serverregler. Et testflag må gerne ændre præsentation, men bør ikke være det, der giver adgang til beskyttet data eller handlinger.
+
+## 13. Ny læring: dato- og tidsregler
+
+- Dato- og tidslåse for konkurrencer skal håndhæves server-side i den relevante lokale tidszone; browserens ur og UI-lås er kun præsentation.
+- Skriv tidszonen eksplicit i serverlogik, når en regel følger en lokal kalenderdag. Undgå at lade serverens standardtidszone bestemme produktregler implicit.
