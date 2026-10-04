@@ -142,3 +142,20 @@ Playbooken er levende dokumentation. Nye generelle læringer kan føjes til den,
 
 - En tom tilstand må først vises, når dataindlæsningen er afsluttet. En tom array-værdi under netværkskald er ikke det samme som bekræftet “ingen data”.
 - I flerbrugerflows bør loading, tom, fejl og data være fire tydelige tilstande; ellers kan langsomt netværk få rigtige data til kortvarigt at se slettede ud.
+
+
+## 15. Ny læring: PWA-releases på rigtige enheder
+
+- En grøn web-deployment betyder ikke automatisk, at en installeret PWA kører samme version. Test både browserudgaven og den installerede app.
+- Hav en eksplicit update-strategi fra starten: ny cache-version ved behov, `skipWaiting()`, `clients.claim()` og aktiv service-worker update-kontrol. Undgå at browsercache skjuler nye releases.
+
+## 16. Ny læring: betinget rendering af specialvisninger
+
+- Når en generisk visning ekskluderer en side, må sidens specialkomponent ikke ligge inde i samme wrapper. En condition som `page!=='eve'` kan ellers gøre en indlejret `page==='eve'` umulig at vise.
+- Efter ændringer i JSX-conditions bør kernevisningen testes direkte, ikke kun buildes.
+
+## 17. Ny læring: auth-fejl og recovery
+
+- Slå ikke alle loginfejl sammen til “forkert password”. Skeln mellem ugyldige credentials, ubekræftet e-mail, rate limits og generelle system/netværksfejl, men vis familievenlige tekster i produktion.
+- Midlertidig diagnostik må gerne vise sikker fejlkode/status under fejlsøgning, men fjernes igen efter årsagen er fundet.
+- Password recovery skal testes end-to-end med den rigtige produktions-redirect; en lokal Site URL kan få ellers korrekte reset-mails til at lande på localhost.
