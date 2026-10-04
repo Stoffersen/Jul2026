@@ -73,3 +73,6 @@ html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}body{overscroll-behavi
 
 
 .funBanner{width:100%;margin-top:18px;display:flex;align-items:center;gap:12px;text-align:left;background:#efe3c8;border:1px solid #e7c779;border-radius:20px;padding:15px;color:#17352a}.funBanner>span{font-size:29px}.funBanner div{flex:1}.funBanner small{display:block;margin-bottom:4px;color:#8d6525;font-size:8px;font-weight:900;letter-spacing:.1em}.funBanner b{display:block;font-family:Georgia,serif}.funBanner strong{font-size:24px}
+
+
+.calendarIntro{display:flex;gap:12px;align-items:flex-start;margin:0 0 12px;padding:15px;border-radius:18px;background:#efe3c8;color:#17352a;border:1px solid #e7c779}.calendarIntro>span{font-size:28px}.calendarIntro small{display:block;font-size:8px;font-weight:900;letter-spacing:.12em;color:#8d6525}.calendarIntro b{display:block;margin:3px 0;font-family:Georgia,serif;font-size:15px}.calendarIntro p{margin:0;font-size:9px;line-height:1.5;color:#66756d}.memoryFooter{display:flex;justify-content:center;align-items:center;gap:6px;margin:11px 0 2px;color:#8d6525}.memoryFooter small{font-size:8px;font-weight:800;letter-spacing:.06em}
