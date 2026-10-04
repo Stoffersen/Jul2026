@@ -67,3 +67,6 @@ html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}body{overscroll-behavi
 
 
 .milestones>button{appearance:none;width:100%;font:inherit;text-align:left;border:1px solid #e7ddcc;cursor:pointer}.milestones>button em{display:block;margin-top:5px;font-style:normal;font-size:8px;font-weight:900;color:#8f7136}.milestones>button.big{grid-column:1/-1;background:#f3e7c9}
+
+
+.funCard{margin:10px 0 14px;padding:20px 17px;border-radius:18px;background:#fff8eb;border:1px solid #17352a22;box-shadow:0 10px 24px #17352a12}.funCard small{font-size:8px;font-weight:900;letter-spacing:.14em;color:#8d6525}.funCard h2{margin:7px 0 8px;line-height:1.25}.funCard p{margin:0;font-size:9px;line-height:1.5;color:#66756d}.newFun{width:100%;margin-bottom:15px;border:0;border-radius:14px;padding:12px;background:#17352a;color:#fff8eb;font-weight:900}.quiz{padding-top:14px;border-top:1px solid #17352a22}.quiz>small{display:block;margin-bottom:5px;font-size:8px;font-weight:900;letter-spacing:.12em;color:#8d6525}.quiz>b{display:block;margin-bottom:10px;font-size:11px}
