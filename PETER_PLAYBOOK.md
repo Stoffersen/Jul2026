@@ -159,3 +159,13 @@ Playbooken er levende dokumentation. Nye generelle læringer kan føjes til den,
 - Slå ikke alle loginfejl sammen til “forkert password”. Skeln mellem ugyldige credentials, ubekræftet e-mail, rate limits og generelle system/netværksfejl, men vis familievenlige tekster i produktion.
 - Midlertidig diagnostik må gerne vise sikker fejlkode/status under fejlsøgning, men fjernes igen efter årsagen er fundet.
 - Password recovery skal testes end-to-end med den rigtige produktions-redirect; en lokal Site URL kan få ellers korrekte reset-mails til at lande på localhost.
+
+
+## 18. Genbrugelig familieidentitet på tværs af apps
+
+- Nye Humlehave-/familieapps skal som udgangspunkt genbruge den eksisterende Supabase Auth-brugerbase i projektet `ivwwdpeaonfqalylujap` i stedet for at oprette Peter, Ditte, Caroline og Christine igen.
+- Adgangskoder må aldrig kopieres, gemmes i repoet eller håndteres af appkoden. Supabase Auth er identitetskilden.
+- `family_members` er den fælles kobling mellem en auth-bruger og familiens visningsnavn. Nye apps bør genbruge denne identitet og kun oprette app-specifikke tabeller/data ved siden af.
+- Nye apps skal bruge `persistSession: true` og `autoRefreshToken: true`. Hvis flere apps skal dele en allerede aktiv browsersession helt uden nyt login, skal de hostes under en fælles origin eller bruge et egentligt SSO-flow; localStorage kan ikke deles sikkert mellem forskellige domæner.
+- Genbrug den samme Supabase-backend kun når apps tilhører samme private familie-univers og privacy-modellen passer. Hold app-specifikke RLS-politikker stramme, så fælles login ikke betyder fælles adgang til alle data.
+- Ved en ny familieapp: start med "Humlehave Family Auth" som arkitekturkrav, test de fire eksisterende brugere, og undgå et nyt onboarding-flow med nye konti.
